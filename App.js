@@ -8,6 +8,9 @@ import { initializeApp } from "firebase/app";
 import Edit from "./src/screens/edit";
 import Create from "./src/screens/create";
 import SignUp from "./src/screens/signup";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import FlashMessage from "react-native-flash-message";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -21,6 +24,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 // defaultTheme change
 const AppTheme = {
@@ -55,6 +60,7 @@ export default function App() {
           </>
         )}
       </Stack.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   );
 }
