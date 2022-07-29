@@ -16,9 +16,11 @@ export default function SignUp({ navigation }) {
   const [password, setPassword] = useState("");
   const [age, setAge] = useState("");
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
   // function
   const signUp = async () => {
     // create a new user
+    setLoading(true);
     try {
       const result = await createUserWithEmailAndPassword(
         auth,
@@ -33,12 +35,14 @@ export default function SignUp({ navigation }) {
         gender: gender,
         uid: result.user.uid,
       });
+      setLoading(false);
     } catch (error) {
       console.log("error------->", error);
       showMessage({
         message: "Error",
         type: "danger",
       });
+      setLoading(false);
     }
   };
 
@@ -50,6 +54,7 @@ export default function SignUp({ navigation }) {
       <View style={{ paddingHorizontal: 16, paddingVertical: 25 }}>
         <Input
           placeholder="Email Address"
+          autoCapitalize={"none"}
           onChangeText={(text) => setEmail(text)}
         />
         <Input
@@ -57,7 +62,11 @@ export default function SignUp({ navigation }) {
           onChangeText={(text) => setPassword(text)}
           secureTextEntry
         />
-        <Input placeholder="Full Name" onChangeText={(text) => setName(text)} />
+        <Input
+          placeholder="Full Name"
+          autoCapitalize={"words"}
+          onChangeText={(text) => setName(text)}
+        />
         <Input placeholder="Age" onChangeText={(text) => setAge(text)} />
         {/* radio button */}
         <View style={{ marginVertical: 20 }}>

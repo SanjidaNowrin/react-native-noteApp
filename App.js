@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./src/screens/home";
@@ -8,9 +8,10 @@ import { initializeApp } from "firebase/app";
 import Edit from "./src/screens/edit";
 import Create from "./src/screens/create";
 import SignUp from "./src/screens/signup";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import FlashMessage from "react-native-flash-message";
+import { useState, useEffect } from "react";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -38,15 +39,49 @@ const AppTheme = {
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-  const user = false;
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
+  // signOut function
+  // useEffect(() => {
+  //   signOut(auth);
+  // });
+
+  // firebase auth
+  useEffect(() => {
+    const authSubscription = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        setLoading(false);
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
+    return authSubscription;
+  }, []);
+
+  // loading
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator color="blue" size="large" />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer theme={AppTheme}>
       <Stack.Navigator>
         {user ? (
           <>
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Edit" component={Edit} />
+            <Stack.Screen name="Home" options={{ headerShown: false }}>
+              {(props) => <Home {...props} user={user} />}
+            </Stack.Screen>
+            <Stack.Screen name="Edit" options={{ headerShown: false }}>
+              {(props) => <Create {...props} user={user} />}
+            </Stack.Screen>
+
             <Stack.Screen name="Create" component={Create} />
           </>
         ) : (
