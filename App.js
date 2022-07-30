@@ -12,6 +12,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import FlashMessage from "react-native-flash-message";
 import { useState, useEffect } from "react";
+import Update from "./src/screens/update";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -79,10 +80,13 @@ export default function App() {
               {(props) => <Home {...props} user={user} />}
             </Stack.Screen>
             <Stack.Screen name="Edit" options={{ headerShown: false }}>
-              {(props) => <Create {...props} user={user} />}
+              {(props) => <Edit {...props} user={user} />}
             </Stack.Screen>
 
-            <Stack.Screen name="Create" component={Create} />
+            <Stack.Screen name="Create" options={{ headerShown: false }}>
+              {(props) => <Create {...props} user={user} />}
+            </Stack.Screen>
+            <Stack.Screen name="Update" component={Update} />
           </>
         ) : (
           <>

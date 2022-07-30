@@ -12,30 +12,27 @@ import Button from "../components/Button";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../App";
 import { showMessage } from "react-native-flash-message";
+import RadioInput from "./../components/radio-input";
 // color option
 const noteColorOptions = ["red", "blue", "green"];
 
-export default function Create({ navigation, route, user }) {
+export default function Update({ navigation, route, user }) {
+  // params
+  const noteItem = route.params.item;
+  console.log(noteItem.color);
   // state
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [noteColor, setNoteColor] = useState("blue");
-  const [color, setColor] = useState("blue");
+  const [title, setTitle] = useState(noteItem.title);
+  const [description, setDescription] = useState(noteItem.description);
+  const [noteColor, setNoteColor] = useState(noteItem.color);
   const [loading, setLoading] = useState(false);
 
   // function
-  const onPressCreate = async () => {
+  const onPressUpdate = async () => {
     setLoading(true);
     try {
-      await addDoc(collection(db, "notes"), {
-        title: title,
-        description: description,
-        color: noteColor,
-        uid: user.uid,
-      });
       setLoading(false);
       showMessage({
-        message: "Note created successfully",
+        message: "Note Updated successfully",
         type: "success",
       });
       navigation.goBack();
@@ -47,48 +44,37 @@ export default function Create({ navigation, route, user }) {
 
   return (
     <SafeAreaView style={{ flex: 1, marginHorizontal: 20 }}>
-      <Input placeholder="Title" onChangeText={(text) => setTitle(text)} />
+      <Input
+        placeholder="Title"
+        onChangeText={(text) => setTitle(text)}
+        value={title}
+      />
+
       <Input
         placeholder="Description"
         onChangeText={(text) => setDescription(text)}
         multiline={true}
+        value={description}
       />
       <View style={{ marginTop: 25, marginBottom: 15 }}>
         <Text>Select Your Note Color</Text>
       </View>
       {/* color map */}
-      {noteColorOptions.map((option) => {
-        const selected = option === color;
-        return (
-          <Pressable
-            onPress={() => setColor(option)}
-            key={option}
-            style={styles.radioContainer}
-          >
-            <View
-              style={[
-                styles.outerCircle,
-                selected && styles.selectedOuterCircle,
-              ]}
-            >
-              <View
-                style={[
-                  styles.innerCircle,
-                  selected && styles.selectedInnerCircle,
-                ]}
-              />
-            </View>
-            <Text style={styles.radioText}>{option}</Text>
-          </Pressable>
-        );
-      })}
+      {noteColorOptions.map((option, index) => (
+        <RadioInput
+          key={index}
+          label={option}
+          value={noteColor}
+          setValue={setNoteColor}
+        />
+      ))}
       {loading ? (
         <ActivityIndicator />
       ) : (
         <Button
-          title="Submit"
+          title="Update"
           customStyles={{ marginTop: 60, alignSelf: "center", width: "100%" }}
-          onPress={onPressCreate}
+          onPress={onPressUpdate}
         />
       )}
     </SafeAreaView>
