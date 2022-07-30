@@ -62,7 +62,7 @@ export default function Create({ navigation, route, user }) {
         <ActivityIndicator />
       ) : (
         <Button
-          title="submit"
+          title="Submit"
           customStyles={{
             marginTop: 25,
             alignSelf: "center",
