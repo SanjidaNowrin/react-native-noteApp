@@ -22,7 +22,7 @@ import { db } from "../../App";
 import Button from "../components/Button";
 import { getAuth, signOut } from "firebase/auth";
 import { auth } from "../../App";
-import RadioInput from "../components/radio-input";
+import RadioInput from "../components/RadioInput";
 
 export default function Home({ navigation, route, user }) {
   const [notes, setNotes] = useState([]);
@@ -46,6 +46,7 @@ export default function Home({ navigation, route, user }) {
 
   const renderItem = ({ item }) => {
     const { title, description, color } = item;
+
     return (
       <Pressable
         style={{
@@ -55,31 +56,31 @@ export default function Home({ navigation, route, user }) {
           padding: 15,
         }}
       >
-        <View style={{ display: "flex", flexDirection: " row" }}>
-          {/* delete */}
-          <Pressable
-            onPress={() => {
-              deleteDoc(doc(db, "notes", item.id));
-            }}
-            style={{ position: "absolute", alignSelf: "flex-end", padding: 15 }}
-          >
-            <AntDesign name="delete" size={24} color="red" />
-          </Pressable>
-          {/* edit */}
-          <Pressable
-            onPress={() => {
-              navigation.navigate("Update", { item });
-            }}
-            style={{
-              position: "absolute",
-              alignSelf: "flex-end",
-              padding: 15,
-              marginTop: 45,
-            }}
-          >
-            <Entypo name="edit" size={24} color="black" />
-          </Pressable>
-        </View>
+        {/* <View style={{ display: "flex", flexDirection: " row" }}> */}
+        {/* delete */}
+        <Pressable
+          onPress={() => {
+            deleteDoc(doc(db, "notes", item.id));
+          }}
+          style={{ position: "absolute", alignSelf: "flex-end", padding: 15 }}
+        >
+          <AntDesign name="delete" size={24} color="red" />
+        </Pressable>
+        {/* edit */}
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Update", { item });
+          }}
+          style={{
+            position: "absolute",
+            alignSelf: "flex-end",
+            padding: 15,
+            marginTop: 45,
+          }}
+        >
+          <Entypo name="edit" size={24} color="black" />
+        </Pressable>
+        {/* </View> */}
         <Text style={{ color: "white", fontSize: 24 }}>{title}</Text>
         <Text style={{ color: "white", fontSize: 18, marginTop: 16 }}>
           {description}

@@ -12,7 +12,7 @@ import Button from "../components/Button";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../App";
 import { showMessage } from "react-native-flash-message";
-import RadioInput from "./../components/radio-input";
+import RadioInput from "../components/RadioInput";
 // color option
 const noteColorOptions = ["red", "blue", "green"];
 
